@@ -1,0 +1,41 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/weaveworks/eksctl/main/pkg/apis/eksctl.io/v1alpha5/assets/schema.json
+
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: <your-cluster-name>
+  region: us-east-1
+  version: "1.32"
+  tags: {}
+
+nodeGroups:
+  - name: kafka
+    labels:
+      type: kafka
+    instanceType: m6i.2xlarge
+    availabilityZones: ['us-east-1a']
+    desiredCapacity: 3
+    volumeSize: 80
+    # iam:
+    #   withAddonPolicies:
+    #     ebs: true
+
+availabilityZones: ['us-east-1a', 'us-east-1b'] # Has to be >= 2
+
+# addons:
+#   - name: aws-ebs-csi-driver
+#     configurationValues: |-
+#       defaultStorageClass:
+#         enabled: true
+
+iam:
+  withOIDC: true
+  serviceAccounts:
+  - metadata:
+      name: inkless-kafka
+    attachPolicyARNs:
+    - "arn:aws:iam::<your-account-id>:policy/<your-policy>"
+    roleName: <your-role-name>
+    roleOnly: true
+    #tags: {}

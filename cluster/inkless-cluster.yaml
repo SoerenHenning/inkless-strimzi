@@ -1,0 +1,63 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: inkless
+  annotations:
+    strimzi.io/node-pools: enabled
+    strimzi.io/kraft: enabled
+spec:
+  kafka:
+    image: <your-image>
+    listeners:
+      - name: plain
+        port: 9092
+        type: internal
+        tls: false
+    config:
+      "inkless.object.key.prefix": "inkless"
+      "inkless.control.plane.class": "io.aiven.inkless.control_plane.postgres.PostgresControlPlane"
+      "inkless.control.plane.connection.string": "jdbc:postgresql://postgres:5432/inkless"
+      "inkless.control.plane.username": "admin"
+      "inkless.control.plane.password": "admin"
+      "inkless.storage.backend.class": "io.aiven.inkless.storage_backend.s3.S3Storage"
+      "inkless.storage.s3.bucket.name": "<your-s3-bucket>"
+      "inkless.storage.s3.region": "us-east-1"
+      #"log.inkless.enable": true
+    #rack:
+      #topologyKey: topology.kubernetes.io/zone
+    metricsConfig:
+      type: jmxPrometheusExporter
+      valueFrom:
+        configMapKeyRef:
+          name: inkless-metrics
+          key: kafka-metrics-config.yml
+    template:
+      serviceAccount:
+        metadata:
+          annotations:
+            eks.amazonaws.com/role-arn: <your-iam-role>
+
+  kafkaExporter:
+    logging: info
+
+  entityOperator:
+    topicOperator: {}
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaNodePool
+metadata:
+  name: dual-role
+  labels:
+    strimzi.io/cluster: inkless
+spec:
+  replicas: 3
+  roles:
+    - controller
+    - broker
+  storage:
+    type: ephemeral
+    # type: persistent-claim
+    # size: 500Gi
+    # class: kafka
+    # deleteClaim: true

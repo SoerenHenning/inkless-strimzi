@@ -1,0 +1,3 @@
+[submodule "inkless"]
+	path = inkless
+	url = git@github.com:aiven/inkless.git

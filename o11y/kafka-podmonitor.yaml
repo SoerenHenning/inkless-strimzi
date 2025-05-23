@@ -1,0 +1,11 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: inkless-resources-metrics
+spec:
+  selector:
+    matchLabels:
+      strimzi.io/name: inkless-kafka
+  podMetricsEndpoints:
+  - path: /metrics
+    port: tcp-prometheus

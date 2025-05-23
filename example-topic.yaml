@@ -1,0 +1,11 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: example
+  labels:
+    strimzi.io/cluster: inkless
+spec:
+  partitions: 100
+  replicas: 1
+  config:
+    inkless.enable: true
