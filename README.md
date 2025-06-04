@@ -118,7 +118,7 @@ kubectl exec inkless-dual-role-0 -- bin/kafka-console-consumer.sh --bootstrap-se
 To run the `kafka-producer-perf-test` tool:
 
 ```sh
-kubectl exec inkless-dual-role-0 -- bin/kafka-producer-perf-test.sh --topic example --record-size 1000 --num-records 1000000 --throughput -1 --producer-props bootstrap.servers=inkless-kafka-bootstrap:9092 batch.size=1048576 linger.ms=100
+kubectl exec inkless-dual-role-0 -- bin/kafka-producer-perf-test.sh --topic example --record-size 1000 --num-records 1000000 --throughput -1 --producer-props bootstrap.servers=inkless-kafka-bootstrap:9092 batch.size=1048576 linger.ms=100 max.request.size=64000000
 ```
 
 
