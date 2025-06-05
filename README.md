@@ -63,7 +63,7 @@ Strimzi can, [for example, be installed](https://strimzi.io/quickstarts/) via:
 kubectl create -f 'https://strimzi.io/install/latest?namespace=default'
 ```
 
-To create an Inkless cluster via Strimzi, replace all the `<placeholder>` values in `strimzi/inkless-cluster.yaml` and run:
+To create an Inkless cluster via Strimzi, replace all the `<placeholder>` values in `cluster/inkless-cluster.yaml` and run:
 
 ```sh
 kubectl apply -f cluster/
